@@ -1,0 +1,28 @@
+{
+    "name": "aljerom/cqrs-events",
+    "version": "1.0.0",
+    "description": "CQRS and Domain Events infrastructure for Symfony DDD applications",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": ">=8.4",
+        "doctrine/orm": "^3.0",
+        "psr/log": "^3.0",
+        "ramsey/uuid": "^4.0",
+        "symfony/messenger": "^7.0",
+        "symfony/serializer": "^7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Aljerom\\CqrsEvents\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Aljerom\\CqrsEvents\\Tests\\": "tests/"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^11.0"
+    }
+}
