@@ -1,6 +1,6 @@
 {
     "name": "aljerom/cqrs-events",
-    "version": "1.0.0",
+    "version": "1.0.3",
     "description": "CQRS and Domain Events infrastructure for Symfony DDD applications",
     "type": "library",
     "license": "MIT",
