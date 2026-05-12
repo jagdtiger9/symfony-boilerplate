@@ -6,5 +6,5 @@ namespace Aljerom\CqrsEvents\CQRS;
 
 interface QueryBus
 {
-    public function handle(Query $query): mixed;
+    public function query(Query $query): mixed;
 }

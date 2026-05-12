@@ -9,6 +9,7 @@
         "doctrine/orm": "^3.0",
         "psr/log": "^3.0",
         "ramsey/uuid": "^4.0",
+        "symfony/http-kernel": "^7.0",
         "symfony/messenger": "^7.0",
         "symfony/serializer": "^7.0"
     },
