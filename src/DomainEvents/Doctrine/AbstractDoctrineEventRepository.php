@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Aljerom\CqrsEvents\DomainEvents\Doctrine;
+namespace Aljerom\SymfonyBoilerplate\DomainEvents\Doctrine;
 
-use Aljerom\CqrsEvents\DomainEvents\DomainEventInterface;
-use Aljerom\CqrsEvents\DomainEvents\EventId;
-use Aljerom\CqrsEvents\DomainEvents\EventRepositoryInterface;
-use Aljerom\CqrsEvents\DomainEvents\StoredEvent;
+use Aljerom\SymfonyBoilerplate\DomainEvents\DomainEventInterface;
+use Aljerom\SymfonyBoilerplate\DomainEvents\EventId;
+use Aljerom\SymfonyBoilerplate\DomainEvents\EventRepositoryInterface;
+use Aljerom\SymfonyBoilerplate\DomainEvents\StoredEvent;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;

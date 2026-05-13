@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Aljerom\CqrsEvents\DomainEvents;
+namespace Aljerom\SymfonyBoilerplate\DomainEvents;
 
 interface ReplaceableDomainEventInterface
 {

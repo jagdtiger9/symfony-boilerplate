@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Aljerom\CqrsEvents\CQRS;
+namespace Aljerom\SymfonyBoilerplate\CQRS;
 
 interface Query
 {

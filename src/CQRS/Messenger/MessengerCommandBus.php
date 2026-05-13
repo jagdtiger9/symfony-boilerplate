@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Aljerom\CqrsEvents\CQRS\Messenger;
+namespace Aljerom\SymfonyBoilerplate\CQRS\Messenger;
 
-use Aljerom\CqrsEvents\CQRS\Command;
-use Aljerom\CqrsEvents\CQRS\CommandBus;
+use Aljerom\SymfonyBoilerplate\CQRS\Command;
+use Aljerom\SymfonyBoilerplate\CQRS\CommandBus;
 use Symfony\Component\Messenger\HandleTrait;
 use Symfony\Component\Messenger\MessageBusInterface;
 

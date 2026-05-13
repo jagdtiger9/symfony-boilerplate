@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Aljerom\CqrsEvents\DomainEvents\Doctrine;
+namespace Aljerom\SymfonyBoilerplate\DomainEvents\Doctrine;
 
-use Aljerom\CqrsEvents\DomainEvents\DomainEventAwareInterface;
-use Aljerom\CqrsEvents\DomainEvents\EventRepositoryInterface;
-use Aljerom\CqrsEvents\DomainEvents\ReplaceableDomainEventInterface;
+use Aljerom\SymfonyBoilerplate\DomainEvents\DomainEventAwareInterface;
+use Aljerom\SymfonyBoilerplate\DomainEvents\EventRepositoryInterface;
+use Aljerom\SymfonyBoilerplate\DomainEvents\ReplaceableDomainEventInterface;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 
 final class PersistDomainEventListener

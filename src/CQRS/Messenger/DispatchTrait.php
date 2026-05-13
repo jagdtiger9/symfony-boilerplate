@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Aljerom\CqrsEvents\CQRS\Messenger;
+namespace Aljerom\SymfonyBoilerplate\CQRS\Messenger;
 
 use Symfony\Component\Messenger\Exception\HandlerFailedException;
 
