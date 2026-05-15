@@ -1,6 +1,5 @@
 {
     "name": "aljerom/symfony-boilerplate",
-    "version": "1.1.0",
     "description": "Symfony DDD/CQRS project boilerplate — buses, domain events, request resolver, HTTP/console subscribers",
     "type": "symfony-bundle",
     "license": "MIT",
