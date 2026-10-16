@@ -17,6 +17,7 @@ use Aljerom\SymfonyBoilerplate\EventSubscriber\KernelRequestSubscriber;
 use Aljerom\SymfonyBoilerplate\EventSubscriber\ResponseSubscriber;
 use Aljerom\SymfonyBoilerplate\EventSubscriber\ValidationExceptionListener;
 use Aljerom\SymfonyBoilerplate\Request\MessageValueResolver;
+use Aljerom\SimpleHydrator\SimpleHydrator;
 use Doctrine\ORM\Events;
 
 return App::config([
@@ -68,6 +69,9 @@ return App::config([
                 '$defaultTimeZone' => '%symfony_boilerplate.timezone%',
             ],
         ],
+
+        // third-party class; consumers' src/ autodiscovery does not register it
+        SimpleHydrator::class => [],
 
         MessageValueResolver::class => [],
 
