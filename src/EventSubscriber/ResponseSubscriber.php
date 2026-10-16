@@ -9,6 +9,9 @@ use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpKernel\KernelInterface;
 
+/**
+ * https://symfony.com/doc/current/profiler.html
+ */
 final class ResponseSubscriber implements EventSubscriberInterface
 {
     public function __construct(private readonly KernelInterface $kernel)

@@ -9,6 +9,7 @@ use Aljerom\SymfonyBoilerplate\CQRS\Messenger\MessengerCommandBus;
 use Aljerom\SymfonyBoilerplate\CQRS\Messenger\MessengerQueryBus;
 use Aljerom\SymfonyBoilerplate\CQRS\QueryBus;
 use Aljerom\SymfonyBoilerplate\DomainEvents\Doctrine\PersistDomainEventListener;
+use Aljerom\SymfonyBoilerplate\DomainEvents\NullEventRepository;
 use Aljerom\SymfonyBoilerplate\EventSubscriber\AddErrorDetailsStampSubscriber;
 use Aljerom\SymfonyBoilerplate\EventSubscriber\ConsoleDumperSubscriber;
 use Aljerom\SymfonyBoilerplate\EventSubscriber\DomainEventPublishSubscriber;
@@ -18,38 +19,62 @@ use Aljerom\SymfonyBoilerplate\EventSubscriber\ValidationExceptionListener;
 use Aljerom\SymfonyBoilerplate\Request\MessageValueResolver;
 use Doctrine\ORM\Events;
 
-return static function (ContainerConfigurator $container): void {
-    $services = $container->services()
-        ->defaults()
-        ->autowire()
-        ->autoconfigure();
+return App::config([
+    'services' => [
+        '_defaults' => [
+            'autowire' => true,
+            'autoconfigure' => true,
+        ],
 
-    $services->set(MessengerCommandBus::class);
-    $services->alias(CommandBus::class, MessengerCommandBus::class);
+        MessengerCommandBus::class => [],
+        CommandBus::class => '@'.MessengerCommandBus::class,
 
-    $services->set(MessengerQueryBus::class);
-    $services->alias(QueryBus::class, MessengerQueryBus::class);
+        MessengerQueryBus::class => [],
+        QueryBus::class => '@'.MessengerQueryBus::class,
 
-    $services->set(PersistDomainEventListener::class)
-        ->tag('doctrine.event_listener', [
-            'event' => Events::onFlush,
-            'priority' => 500,
-        ]);
+        // the default no-op event repository; the EventRepositoryInterface alias
+        // is set in SymfonyBoilerplateBundle::loadExtension() only when the
+        // consuming project does not bind the interface itself
+        NullEventRepository::class => [],
 
-    $services->set(DomainEventPublishSubscriber::class);
-    $services->set(ValidationExceptionListener::class);
-    $services->set(KernelRequestSubscriber::class)
-        ->arg('$defaultTimeZone', '%symfony_boilerplate.timezone%')
-        ->arg('$defaultLocale', '%symfony_boilerplate.locale%');
+        // listeners are applied by default to all Doctrine connections
+        PersistDomainEventListener::class => [
+            'tags' => [
+                [
+                    'doctrine.event_listener' => [
+                        'event' => Events::onFlush,
+                        'priority' => 500,
+                        // you can also restrict listeners to a specific Doctrine connection
+                        //'connection' => 'default',
+                    ],
+                ],
+            ],
+        ],
 
-    $services->set(ResponseSubscriber::class);
+        DomainEventPublishSubscriber::class => [],
+        ValidationExceptionListener::class => [],
 
-    $services->set(ConsoleDumperSubscriber::class)
-        ->arg('$defaultTimeZone', '%symfony_boilerplate.timezone%');
-    $services->set(MessageValueResolver::class);
+        KernelRequestSubscriber::class => [
+            'arguments' => [
+                '$defaultTimeZone' => '%symfony_boilerplate.timezone%',
+                '$defaultLocale' => '%symfony_boilerplate.locale%',
+            ],
+        ],
 
-    // Replaces Symfony's default listener to avoid including FlattenException in the stamp
-    $services->set('messenger.failure.add_error_details_stamp_listener')
-        ->class(AddErrorDetailsStampSubscriber::class)
-        ->tag('kernel.event_subscriber');
-};
+        ResponseSubscriber::class => [],
+
+        ConsoleDumperSubscriber::class => [
+            'arguments' => [
+                '$defaultTimeZone' => '%symfony_boilerplate.timezone%',
+            ],
+        ],
+
+        MessageValueResolver::class => [],
+
+        // Replaces Symfony's default listener to avoid including FlattenException in the stamp
+        'messenger.failure.add_error_details_stamp_listener' => [
+            'class' => AddErrorDetailsStampSubscriber::class,
+            'tags' => ['kernel.event_subscriber'],
+        ],
+    ],
+]);

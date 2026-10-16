@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Aljerom\SymfonyBoilerplate\DomainEvents;
 
+use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 
 final class EventId
@@ -14,7 +15,7 @@ final class EventId
 
     public static function fromString(string $id): self
     {
-        return new self(\Ramsey\Uuid\Uuid::fromString($id));
+        return new self(Uuid::fromString($id));
     }
 
     public static function fromUuid(UuidInterface $uuid): self

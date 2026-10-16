@@ -12,17 +12,25 @@ use Symfony\Component\VarDumper\Dumper\CliDumper;
 use Symfony\Component\VarDumper\Dumper\HtmlDumper;
 use Symfony\Component\VarDumper\VarDumper;
 
+/**
+ * Console commands events
+ */
 final readonly class ConsoleDumperSubscriber implements EventSubscriberInterface
 {
-    public function __construct(private string $defaultTimeZone)
-    {
+    public function __construct(
+        private string $defaultTimeZone
+    ) {
     }
 
     public static function getSubscribedEvents(): array
     {
         return [
-            ConsoleCommandEvent::class => [['__invoke', 1]],
-            ConsoleEvents::COMMAND => [['presetDefaults', 1]],
+            ConsoleCommandEvent::class => [
+                ['__invoke', 1],
+            ],
+            ConsoleEvents::COMMAND => [
+                ['presetDefaults', 1],
+                ],
         ];
     }
 

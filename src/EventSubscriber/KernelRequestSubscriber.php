@@ -13,6 +13,13 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Uid\Uuid;
 
+/**
+ * Request base operations
+ * - locale
+ * - timezone
+ * - unique request ID
+ * - json payload to array
+ */
 final readonly class KernelRequestSubscriber implements EventSubscriberInterface
 {
     private const string UNIQUE_ID_NAME = '_request.unique.id';

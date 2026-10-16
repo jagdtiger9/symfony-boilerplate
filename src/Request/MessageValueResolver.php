@@ -12,6 +12,9 @@ use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
+/**
+ * https://symfony.com/doc/current/controller/value_resolver.html
+ */
 class MessageValueResolver implements ValueResolverInterface
 {
     public function __construct(

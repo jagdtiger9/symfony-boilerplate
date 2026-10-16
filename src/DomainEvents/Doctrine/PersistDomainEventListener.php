@@ -11,8 +11,9 @@ use Doctrine\ORM\Event\OnFlushEventArgs;
 
 final class PersistDomainEventListener
 {
-    public function __construct(private readonly EventRepositoryInterface $eventRepo)
-    {
+    public function __construct(
+        private readonly EventRepositoryInterface $eventRepo
+    ) {
     }
 
     public function onFlush(OnFlushEventArgs $args): void
