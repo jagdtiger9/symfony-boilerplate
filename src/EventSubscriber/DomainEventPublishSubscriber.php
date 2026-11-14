@@ -15,6 +15,7 @@ use Symfony\Component\Console\Event\ConsoleTerminateEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\TerminateEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\Messenger\Event\WorkerMessageHandledEvent;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -34,6 +35,7 @@ class DomainEventPublishSubscriber implements EventSubscriberInterface
         return [
             KernelEvents::TERMINATE => [['onHttpProcess', 10]],
             ConsoleEvents::TERMINATE => [['onConsoleProcess', 10]],
+            WorkerMessageHandledEvent::class => [['onWorkerHandled', 10]],
         ];
     }
 
@@ -43,6 +45,11 @@ class DomainEventPublishSubscriber implements EventSubscriberInterface
     }
 
     public function onConsoleProcess(ConsoleTerminateEvent $event): void
+    {
+        $this->publishPending();
+    }
+
+    public function onWorkerHandled(WorkerMessageHandledEvent $event): void
     {
         $this->publishPending();
     }
@@ -60,6 +67,10 @@ class DomainEventPublishSubscriber implements EventSubscriberInterface
             return;
         }
 
+        if (!$storedEvents) {
+            return;
+        }
+
         foreach ($storedEvents as $storedEvent) {
             try {
                 $domainEvent = $this->serializer->deserialize(
@@ -72,7 +83,7 @@ class DomainEventPublishSubscriber implements EventSubscriberInterface
                 $this->eventBus->dispatch($domainEvent);
                 $this->entityManager->remove($storedEvent);
             } catch (\Throwable $e) {
-                $this->logger->debug('==> Event dispatch error: ' . $e->getMessage());
+                $this->logger->warning('Domain event publish failed: ' . $storedEvent->getTypeName(), ['exception' => $e]);
             }
         }
 

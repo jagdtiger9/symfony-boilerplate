@@ -17,6 +17,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 abstract class AbstractDoctrineEventRepository implements EventRepositoryInterface
 {
     private string $uniqueRequestId;
+    private bool $appended = false;
 
     public function __construct(
         protected readonly EntityManagerInterface $em,
@@ -65,6 +66,8 @@ abstract class AbstractDoctrineEventRepository implements EventRepositoryInterfa
         $this->em->persist($storedEvent);
         $classMetadata = $this->em->getClassMetadata($this->getEntityClass());
         $this->em->getUnitOfWork()->computeChangeSet($classMetadata, $storedEvent);
+
+        $this->appended = true;
     }
 
     public function replace(DomainEventInterface $domainEvent): void
@@ -92,6 +95,17 @@ abstract class AbstractDoctrineEventRepository implements EventRepositoryInterfa
     /** @return StoredEvent[] */
     public function getUnpublished(DateTimeImmutable $dateTime): array
     {
+        if (!$this->appended) {
+            return [];
+        }
+
+        // Bind the cutoff with the field's mapped type: an untyped parameter
+        // reaches Postgres as a naive string, which a timestamptz column then
+        // reads in the session timezone instead of at the event's own offset.
+        $occurredOnType = $this->em
+            ->getClassMetadata($this->getEntityClass())
+            ->getTypeOfField('occurredOn');
+
         return $this->em->createQueryBuilder()
             ->select('e')
             ->from($this->getEntityClass(), 'e')
@@ -99,7 +113,7 @@ abstract class AbstractDoctrineEventRepository implements EventRepositoryInterfa
             ->setParameter('requestId', $this->uniqueRequestId)
             ->andWhere('e.publishedOn = 0')
             ->andWhere('e.occurredOn <= :now')
-            ->setParameter('now', $dateTime)
+            ->setParameter('now', $dateTime, $occurredOnType)
             ->orderBy('e.occurredOn')
             ->getQuery()
             ->getResult();

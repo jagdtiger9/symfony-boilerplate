@@ -8,9 +8,12 @@ use DateTimeImmutable;
 
 trait DomainEventTrait
 {
-    private string $aggregateRootId;
-    private string $occurredOn;
-    private ?string $actorId;
+    // Public so the Symfony Serializer can restore them when a stored event is
+    // denormalized from the outbox: private properties have no setters, and the
+    // constructor only receives the event payload.
+    public string $aggregateRootId;
+    public string $occurredOn;
+    public ?string $actorId;
 
     protected function initEvent(string $aggregateRootId, ?string $actorId = null): void
     {

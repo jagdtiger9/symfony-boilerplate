@@ -27,6 +27,17 @@ final class PersistDomainEventListener
                 }
             }
         }
+
+        // Many-to-many edits schedule a collection change without touching the
+        // owning entity's change set.
+        foreach ([$uow->getScheduledCollectionDeletions(), $uow->getScheduledCollectionUpdates()] as $scheduled) {
+            foreach ($scheduled as $collection) {
+                $entity = $collection->getOwner();
+                if ($entity instanceof DomainEventAwareInterface) {
+                    $this->persistEvents($entity);
+                }
+            }
+        }
     }
 
     private function persistEvents(DomainEventAwareInterface $entity): void
